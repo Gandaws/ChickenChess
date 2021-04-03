@@ -1,5 +1,4 @@
 @enum Player_type Computer Person
-@enum Player_colour Black White
 
 struct Player
     level::Int64
@@ -20,22 +19,22 @@ function set_up_pieces(colour::Player_colour)
         pieces_row = 8
     end
 
-    chess_pieces[1] = Egg(pawn_row, 'A')
-    chess_pieces[2] = Egg(pawn_row, 'B')
-    chess_pieces[3] = Egg(pawn_row, 'C')
-    chess_pieces[4] = Egg(pawn_row, 'D')
-    chess_pieces[5] = Egg(pawn_row, 'E')
-    chess_pieces[6] = Egg(pawn_row, 'F')
-    chess_pieces[7] = Egg(pawn_row, 'G')
-    chess_pieces[8] = Egg(pawn_row, 'H')
-    chess_pieces[9] = Coop(pieces_row, 'A')
-    chess_pieces[10] = Farmer(pieces_row, 'B')
-    chess_pieces[11] = Chick(pieces_row, 'C')
-    chess_pieces[12] = Hen(pieces_row, 'D')
-    chess_pieces[13] = Rooster(pieces_row, 'E')
-    chess_pieces[14] = Chick(pieces_row, 'F')
-    chess_pieces[15] = Farmer(pieces_row, 'G')
-    chess_pieces[16] = Coop(pieces_row, 'H')
+    chess_pieces[1] = Egg(pawn_row, 'A', colour)
+    chess_pieces[2] = Egg(pawn_row, 'B', colour)
+    chess_pieces[3] = Egg(pawn_row, 'C', colour)
+    chess_pieces[4] = Egg(pawn_row, 'D', colour)
+    chess_pieces[5] = Egg(pawn_row, 'E', colour)
+    chess_pieces[6] = Egg(pawn_row, 'F', colour)
+    chess_pieces[7] = Egg(pawn_row, 'G', colour)
+    chess_pieces[8] = Egg(pawn_row, 'H', colour)
+    chess_pieces[9] = Coop(pieces_row, 'A', colour)
+    chess_pieces[10] = Farmer(pieces_row, 'B', colour)
+    chess_pieces[11] = Chick(pieces_row, 'C', colour)
+    chess_pieces[12] = Hen(pieces_row, 'D', colour)
+    chess_pieces[13] = Rooster(pieces_row, 'E', colour)
+    chess_pieces[14] = Chick(pieces_row, 'F', colour)
+    chess_pieces[15] = Farmer(pieces_row, 'G', colour)
+    chess_pieces[16] = Coop(pieces_row, 'H', colour)
 
     return chess_pieces
 end

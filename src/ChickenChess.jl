@@ -16,6 +16,9 @@ function play_chess()
     while ismissing(response)
         println("Do you wish to play against another person (y/n)?")
         response = parse_yn(readline())
+        if ismissing(response)
+            println("Invalid response")
+        end
     end
 
     opponent = missing
@@ -42,6 +45,21 @@ function next_turn(game::Game)
     current_player = game.player1.colour == game.turn ? game.player1 : game.player2
     println("It is $(current_player.name)'s turn:")
 
+    # Get valid move
+    piece, new_location = get_move(game, current_player)
+
+    # Do move
+    piece.location = new_location
+    if typeof(piece) == Egg
+        piece.move_number += 1
+    end
+
+    # Check if game finished
+
+    game.turn = current_player.colour == Black::Player_colour ? White::Player_colour : Black::Player_colour
+end
+
+function get_move(game::Game, current_player::Player)
     piece = missing
     while ismissing(piece)
         println("What piece would you like to move (enter valid location as row/column i.e. 2A):")
@@ -53,22 +71,47 @@ function next_turn(game::Game)
                 piece = missing
             end
         end
+        if ismissing(piece)
+            println("Invalid response")
+        end
     end
 
     new_location = missing
-    while ismissing(new_location)
-        println("Where would you like to move (enter valid location as row/column i.e. 2A):")
-        new_location = parse_location(readline())
+    # Check valid move!
+    valid_move = false
+    while !valid_move
+        while ismissing(new_location)
+            println("Where would you like to move (enter valid location as row/column i.e. 2A):")
+            new_location = parse_location(readline())
+            if ismissing(new_location)
+                println("Invalid response")
+            end
+        end
+        valid_move = check_valid_move(piece, new_location)
+        if !valid_move
+            new_location = missing
+            println("Invalid move")
+        end
     end
 
-    # Check valid move!
+    return piece, new_location
+end
 
-    # Do valid move
-    piece.location = new_location
+function check_valid_move(piece::Egg, new_location::Location)
+    delta_row = new_location.row - piece.location.row
+    delta_column = new_location.column - piece.location.column 
 
-    # Check if game finished
+    if piece.colour == White::Player_colour
+        if (delta_row == 2 && piece.move_number == 0) || delta_row == 1
+            return false
+        end
+    else
+        if (delta_row == -2 && piece.move_number == 0) || delta_row == -1
+            return false
+        end
+    end
 
-    game.turn = current_player.colour == Black::Player_colour ? White::Player_colour : Black::Player_colour
+    return true
 end
 
 function parse_yn(response::String)

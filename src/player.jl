@@ -38,30 +38,3 @@ function set_up_pieces(colour::Player_colour)
 
     return chess_pieces
 end
-
-#=
-function move_chess_piece(player::Player, opponent::Player, piece_to_move::Int64, new_row::Int64, new_column::Char)
-    new_row, new_column = validate_location(new_row, new_column)
-    if player.chess_pieces[piece_to_move].taken == true
-        error("Can't move a taken piece")
-    end
-
-    if check_valid_move(piece, new_row, new_column)
-        return chess_piece(piece.type, new_row, new_column, piece.move_number + 1)
-    end
-
-    return piece
-end
-
-function check_valid_move(piece::egg, new_row::Int64, new_column::Char)
-    if piece.move_number == 0 && new_row - piece.row > 2
-        return false
-    elseif piece.move_number > 0 && new_row - piece.row > 1
-        return false
-    elseif piece.column !== new_column
-        return false
-    end
-        
-    return true
-end
-=#

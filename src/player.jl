@@ -31,13 +31,8 @@ function set_up_pieces(colour::Player_colour)
     chess_pieces[9] = Coop(pieces_row, 'A')
     chess_pieces[10] = Farmer(pieces_row, 'B')
     chess_pieces[11] = Chick(pieces_row, 'C')
-    if colour == Black::Player_colour
-        chess_pieces[12] = Hen(pieces_row, 'D')
-        chess_pieces[13] = Rooster(pieces_row, 'E')
-    else
-        chess_pieces[12] = Rooster(pieces_row, 'D')
-        chess_pieces[13] = Hen(pieces_row, 'E')
-    end
+    chess_pieces[12] = Hen(pieces_row, 'D')
+    chess_pieces[13] = Rooster(pieces_row, 'E')
     chess_pieces[14] = Chick(pieces_row, 'F')
     chess_pieces[15] = Farmer(pieces_row, 'G')
     chess_pieces[16] = Coop(pieces_row, 'H')

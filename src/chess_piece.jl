@@ -5,6 +5,7 @@ mutable struct Location
         if valid_location(row, column)
             return new(row, column)
         else
+            println("Invalid location")
             return missing
         end
     end

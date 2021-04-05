@@ -38,3 +38,44 @@ function set_up_pieces(colour::Player_colour)
 
     return chess_pieces
 end
+
+function common_piece_checks(new_location::Location, current_player::Player, other_player::Player)
+    if !ismissing(find_piece(current_player, new_location))
+        return false
+    end
+
+    if typeof(find_piece(other_player, new_location)) == Rooster
+        return false
+    end
+
+    return true
+end
+
+function check_valid_move(piece::Egg, new_location::Location, current_player::Player, other_player::Player)
+    if !common_piece_checks(new_location, current_player, other_player)
+        return false
+    end
+
+    delta_row = new_location.row - piece.location.row
+    delta_column = new_location.column - piece.location.column 
+
+    if piece.colour == White::Player_colour
+        if !((delta_row == 2 && piece.move_number == 0) || delta_row == 1)
+            return false
+        end
+    else
+        if !((delta_row == -2 && piece.move_number == 0) || delta_row == -1)
+            return false
+        end
+    end
+
+    if delta_column > 1 || delta_column < -1
+        return false
+    end
+
+    if (delta_column == 1 || delta_column == -1) && ismissing(find_piece(other_player, new_location))
+        return false
+    end
+
+    return true
+end

@@ -51,15 +51,23 @@ end
 
 function next_turn(game::Game)
     current_player = game.player1.colour == game.turn ? game.player1 : game.player2
+    other_player = game.player1.colour == game.turn ? game.player2 : game.player1
     println("It is $(current_player.name)'s turn they are $(current_player.colour):")
 
     # Get valid move
-    piece, new_location = get_move(game, current_player)
+    piece, new_location = get_move(current_player, other_player)
 
     # Do move
     piece.location = new_location
+
     if typeof(piece) == Egg
         piece.move_number += 1
+    end
+
+    # Check if we've taken anyone!
+    taken_piece = find_piece(other_player, new_location)
+    if !ismissing(taken_piece)
+        taken_piece.taken = true
     end
 
     # Check if game finished
@@ -67,20 +75,17 @@ function next_turn(game::Game)
     game.turn = current_player.colour == Black::Player_colour ? White::Player_colour : Black::Player_colour
 end
 
-function get_move(game::Game, current_player::Player)
+function get_move(current_player::Player, other_player::Player)
     piece = missing
     while ismissing(piece)
         println("What piece would you like to move (enter valid location as row/column i.e. 2A):")
         location = parse_location(readline())
     
         if !ismissing(location)
-            piece = find_piece(game, location)
-            if ismissing(piece) || (piece.taken == true) || (piece.colour !== current_player.colour)
-                piece = missing
+            piece = find_piece(current_player, location)
+            if ismissing(piece)
+                println("No valid piece at location")
             end
-        end
-        if ismissing(piece)
-            println("Invalid response")
         end
     end
 
@@ -91,11 +96,8 @@ function get_move(game::Game, current_player::Player)
         while ismissing(new_location)
             println("Where would you like to move (enter valid location as row/column i.e. 2A):")
             new_location = parse_location(readline())
-            if ismissing(new_location)
-                println("Invalid response")
-            end
         end
-        valid_move = check_valid_move(piece, new_location)
+        valid_move = check_valid_move(piece, new_location, current_player, other_player)
         if !valid_move
             new_location = missing
             println("Invalid move")
@@ -105,25 +107,9 @@ function get_move(game::Game, current_player::Player)
     return piece, new_location
 end
 
-function check_valid_move(piece::Egg, new_location::Location)
-    delta_row = new_location.row - piece.location.row
-    delta_column = new_location.column - piece.location.column 
-
-    if piece.colour == White::Player_colour
-        if (delta_row == -2 && piece.move_number == 0) || delta_row == -1
-            return false
-        end
-    else
-        if (delta_row == 2 && piece.move_number == 0) || delta_row == 1
-            return false
-        end
-    end
-
-    return true
-end
-
 function parse_location(response::String)
     if length(response) !== 2
+        println("Invalid location")
         return missing
     end
 
@@ -131,6 +117,7 @@ function parse_location(response::String)
     try
         row = parse(Integer, response[1])
     catch
+        println("Invalid location")
         return missing
     end
 

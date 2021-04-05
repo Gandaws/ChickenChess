@@ -51,3 +51,15 @@ function find_piece(game::Game, location::Location)
 
     return missing
 end
+
+function find_piece(player::Player, location::Location)
+    for piece in player.chess_pieces
+        if piece.taken == false
+            if piece.location == location
+                return piece
+            end
+        end
+    end
+
+    return missing
+end

@@ -21,6 +21,11 @@ print_piece(rooster::Rooster) = rooster.colour == White::Player_colour ? print_r
 
 print_spacer() = print_rgb(200, 200, 200, ' ')
 
+"""
+    display_game(game)
+
+Prints to the terminal the current state of the pieces.
+"""
 function display_game(game::Game)
     println("Gameboard:")
     println("   A   B   C   D   E   F   G   H")
@@ -38,6 +43,11 @@ function display_game(game::Game)
     end
 end
 
+"""
+    find_piece(game/player, location)
+
+Checks for if a piece is at the specified location (overloaded to check either a game or player)
+"""
 function find_piece(game::Game, location::Location)
     for piece ∈ vcat(game.player1.chess_pieces, game.player2.chess_pieces)
         if piece.taken == false

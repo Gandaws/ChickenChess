@@ -1,3 +1,8 @@
+"""
+    Location(row, column)
+
+Location structure with fields row / column, only valid chess locations are created else returns missing.
+"""
 mutable struct Location
     row::Int64
     column::Char
@@ -12,8 +17,37 @@ mutable struct Location
     end
 end
 
+"""
+    Location(string)
+
+Creates a chess location from a string - returns missing if invalid / can't parse.
+"""
+function Location(response::String)
+    if length(response) !== 2
+        println("Invalid location")
+        return missing
+    end
+
+    row = -1
+    try
+        row = parse(Integer, response[1])
+    catch
+        println("Invalid location")
+        return missing
+    end
+
+    column = response[2]
+
+    return Location(row, column)
+end
+
 Base.:(==)(loc1::Location, loc2::Location) = (loc1.row == loc2.row) && (loc1.column == loc2.column)
 
+"""
+    valid_location(row, column)
+
+Checks if the row / column is a valid chess location (returns true/false).
+"""
 function valid_location(row::Int64, column::Char)
     if row < 1 || row > 8
         return false

@@ -10,4 +10,9 @@
     @test ChickenChess.Location(1, 'a').row == 1
     @test ChickenChess.Location(1, 'a').column == 'A'
     @test ChickenChess.Location(1, 'A') == ChickenChess.Location(1, 'a')
+
+    @test ismissing(ChickenChess.Location("hello world!"))
+    @test ismissing(ChickenChess.Location("A3"))
+    @test ismissing(ChickenChess.Location("9A"))
+    @test ChickenChess.Location("3A") == ChickenChess.Location(3, 'A')
 end

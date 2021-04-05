@@ -1,5 +1,11 @@
 @enum Player_type Computer Person
 
+"""
+    Player(name, type, colour, level)
+
+Creates a new Player object with fields name, type(computer / human), colour(White / Black) 
+and pieces at starting locations
+"""
 struct Player
     level::Int64
     name::String
@@ -9,6 +15,11 @@ struct Player
     Player(name::String, type::Player_type, colour::Player_colour, level::Int64 = 1) = new(level, name, type, colour, set_up_pieces(colour))
 end
 
+"""
+    set_up_pieces(colour)
+
+Creates an array of pieces at starting locations (depends on the colour of the pieces).
+"""
 function set_up_pieces(colour::Player_colour)
     chess_pieces = Array{AbstractChessPiece, 1}(undef, 16)
     
@@ -39,6 +50,12 @@ function set_up_pieces(colour::Player_colour)
     return chess_pieces
 end
 
+"""
+    common_piece_checks(new_location, current_player, other_player)
+
+Common move checks - if you are trying to move onto a square that already 
+contains one of your pieces or where your opponents king is.
+"""
 function common_piece_checks(new_location::Location, current_player::Player, other_player::Player)
     if !ismissing(find_piece(current_player, new_location))
         return false
@@ -51,6 +68,11 @@ function common_piece_checks(new_location::Location, current_player::Player, oth
     return true
 end
 
+"""
+    check_valid_move(piece, new_location, current_player, other_player)
+
+Checks for if it is a valid move - this is overloaded for different piece types!
+"""
 function check_valid_move(piece::Egg, new_location::Location, current_player::Player, other_player::Player)
     if !common_piece_checks(new_location, current_player, other_player)
         return false

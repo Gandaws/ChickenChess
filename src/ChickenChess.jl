@@ -9,6 +9,11 @@ using REPL.TerminalMenus
 
 export play_chess
 
+"""
+    play_chess()
+
+Play a game of chess!!! Currently only human players supported.
+"""
 function play_chess()
     println("Enter your name:")
     name = readline()
@@ -37,6 +42,7 @@ function play_chess()
     println("Enter opponent name:")
     opponent = readline()
 
+    # Create the players and game
     player1 = Player(name, Person::Player_type, player_colour_selected)
     player2 = Player(opponent, Person::Player_type, player_colour_selected == White::Player_colour ? Black::Player_colour : White::Player_colour)
     game = Game(player1, player2)
@@ -49,6 +55,11 @@ function play_chess()
     end
 end
 
+"""
+    next_turn(game)
+
+Do the next turn in a game of chess
+"""
 function next_turn(game::Game)
     current_player = game.player1.colour == game.turn ? game.player1 : game.player2
     other_player = game.player1.colour == game.turn ? game.player2 : game.player1
@@ -60,7 +71,7 @@ function next_turn(game::Game)
     # Do move
     piece.location = new_location
 
-    if typeof(piece) == Egg
+    if typeof(piece) == Egg || typeof(piece) == Rooster
         piece.move_number += 1
     end
 
@@ -75,6 +86,11 @@ function next_turn(game::Game)
     game.turn = current_player.colour == Black::Player_colour ? White::Player_colour : Black::Player_colour
 end
 
+"""
+    get_move(current_player, other_player)
+
+Get the next move for the player (performs validation)!
+"""
 function get_move(current_player::Player, other_player::Player)
     piece = missing
     while ismissing(piece)
@@ -104,25 +120,6 @@ function get_move(current_player::Player, other_player::Player)
     end
 
     return piece, new_location
-end
-
-function parse_location(response::String)
-    if length(response) !== 2
-        println("Invalid location")
-        return missing
-    end
-
-    row = -1
-    try
-        row = parse(Integer, response[1])
-    catch
-        println("Invalid location")
-        return missing
-    end
-
-    column = response[2]
-
-    return Location(row, column)
 end
 
 end # module

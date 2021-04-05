@@ -95,7 +95,7 @@ function get_move(current_player::Player, other_player::Player)
     piece = missing
     while ismissing(piece)
         println("What piece would you like to move (enter valid location as row/column i.e. 2A):")
-        location = parse_location(readline())
+        location = Location(readline())
     
         if !ismissing(location)
             piece = find_piece(current_player, location)
@@ -110,7 +110,7 @@ function get_move(current_player::Player, other_player::Player)
     while !valid_move
         while ismissing(new_location)
             println("Where would you like to move (enter valid location as row/column i.e. 2A):")
-            new_location = parse_location(readline())
+            new_location = Location(readline())
         end
         valid_move = check_valid_move(piece, new_location, current_player, other_player)
         if !valid_move

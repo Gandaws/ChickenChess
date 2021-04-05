@@ -4,33 +4,41 @@ include("chess_piece.jl")
 include("player.jl")
 include("game.jl")
 
-export play_chess
+import REPL
+using REPL.TerminalMenus
 
-@enum yn Yes No
+export play_chess
 
 function play_chess()
     println("Enter your name:")
     name = readline()
 
-    response = missing
-    while ismissing(response)
-        println("Do you wish to play against another person (y/n)?")
-        response = parse_yn(readline())
-        if ismissing(response)
-            println("Invalid response")
-        end
+    options = ["white", "black"]
+    menu = RadioMenu(options, pagesize = 2)
+    choice = request("Choose your colour:", menu)
+
+    player_colour_selected = Black::Player_colour
+    if choice == -1
+        error("menu cancelled!")
+    elseif options[choice] == "white"
+        player_colour_selected = White::Player_colour
     end
 
-    opponent = missing
-    if response == Yes::yn
-        println("Enter opponent name:")
-        opponent = readline()
-    else
+    options = ["human", "computer"]
+    menu = RadioMenu(options, pagesize = 2)
+    choice = request("Choose your opponent type:", menu)
+
+    if choice == -1
+        error("menu cancelled!")
+    elseif options[choice] == "computer"
         error("Only human players supported atm")
     end
     
-    player1 = Player(name, Person::Player_type, White::Player_colour)
-    player2 = Player(opponent, Person::Player_type, Black::Player_colour)
+    println("Enter opponent name:")
+    opponent = readline()
+
+    player1 = Player(name, Person::Player_type, player_colour_selected)
+    player2 = Player(opponent, Person::Player_type, player_colour_selected == White::Player_colour ? Black::Player_colour : White::Player_colour)
     game = Game(player1, player2)
 
     display_game(game)
@@ -43,7 +51,7 @@ end
 
 function next_turn(game::Game)
     current_player = game.player1.colour == game.turn ? game.player1 : game.player2
-    println("It is $(current_player.name)'s turn:")
+    println("It is $(current_player.name)'s turn they are $(current_player.colour):")
 
     # Get valid move
     piece, new_location = get_move(game, current_player)
@@ -102,33 +110,16 @@ function check_valid_move(piece::Egg, new_location::Location)
     delta_column = new_location.column - piece.location.column 
 
     if piece.colour == White::Player_colour
-        if (delta_row == 2 && piece.move_number == 0) || delta_row == 1
+        if (delta_row == -2 && piece.move_number == 0) || delta_row == -1
             return false
         end
     else
-        if (delta_row == -2 && piece.move_number == 0) || delta_row == -1
+        if (delta_row == 2 && piece.move_number == 0) || delta_row == 1
             return false
         end
     end
 
     return true
-end
-
-function parse_yn(response::String)
-    # Case insensitive
-    response = lowercase(response)
-
-    if length(response) !== 1
-        return missing
-    end
-
-    if response[1] == 'y'
-        return Yes::yn
-    elseif response[1] == 'n'
-        return No::yn
-    end
-
-    return missing
 end
 
 function parse_location(response::String)

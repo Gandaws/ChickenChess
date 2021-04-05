@@ -6,15 +6,22 @@ mutable struct Game
     Game(player1::Player, player2::Player, turn::Player_colour = White::Player_colour, finished::Bool = false) = new(player1, player2, turn, finished)
 end
 
-print_piece(m::Missing) = print('〰')
-print_piece(egg::Egg) = print('🐣')
-print_piece(coop::Coop) = print('🏡')
-print_piece(farmer::Farmer) = print('👴')
-print_piece(chick::Chick) = print('🐥')
-print_piece(hen::Hen) = print('🐔')
-print_piece(rooster::Rooster) = print('🐓')
 
-print_spacer() = print(' ')
+
+function print_rgb(r, g, b, t)
+    print("\e[1m\e[38;2;$r;$g;$b;249m", t)
+end
+
+print_piece(m::Missing) = print_rgb(200, 200, 200, '〰')
+
+print_piece(egg::Egg) = egg.colour == White::Player_colour ? print_rgb(255, 255, 255, '🐣') : print_rgb(100, 100, 100, '🐣')
+print_piece(coop::Coop) = coop.colour == White::Player_colour ? print_rgb(255, 255, 255, '🏡') : print_rgb(100, 100, 100, '🏡')
+print_piece(farmer::Farmer) = farmer.colour == White::Player_colour ? print_rgb(255, 255, 255, '👴') : print_rgb(100, 100, 100, '👴')
+print_piece(chick::Chick) = chick.colour == White::Player_colour ? print_rgb(255, 255, 255, '🐤') : print_rgb(100, 100, 100,'🐤')
+print_piece(hen::Hen) = hen.colour == White::Player_colour ? print_rgb(255, 255, 255, '🐓') : print_rgb(100, 100, 100, '🐓')
+print_piece(rooster::Rooster) = rooster.colour == White::Player_colour ? print_rgb(255, 255, 255, '🐔') : print_rgb(100, 100, 100, '🐔')
+
+print_spacer() = print_rgb(200, 200, 200, ' ')
 
 function display_game(game::Game)
     println("Gameboard:")

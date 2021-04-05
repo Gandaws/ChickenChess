@@ -1,8 +1,12 @@
 using Test
 using ChickenChess
 
-imogen = ChickenChess.Player("Imogen", ChickenChess.Person::ChickenChess.Player_type, ChickenChess.White::ChickenChess.Player_colour)
-henry = ChickenChess.Player("Henry", ChickenChess.Person::ChickenChess.Player_type, ChickenChess.Black::ChickenChess.Player_colour)
+include("chess_piece.jl")
+include("player.jl")
 
-game = Game(imogen, henry)
-display_game(game)
+@testset "parse_location" begin
+    @test ismissing(ChickenChess.parse_location("hello world!"))
+    @test ismissing(ChickenChess.parse_location("A3"))
+    @test ismissing(ChickenChess.parse_location("9A"))
+    @test ChickenChess.parse_location("3A") == ChickenChess.Location(3, 'A')
+end

@@ -2,6 +2,7 @@ mutable struct Location
     row::Int64
     column::Char
     function Location(row::Int64, column::Char)
+        column = uppercase(column)
         if valid_location(row, column)
             return new(row, column)
         else
@@ -18,7 +19,6 @@ function valid_location(row::Int64, column::Char)
         return false
     end
 
-    column = uppercase(column)
     if column < 'A' || column > 'H'
         return false
     end
@@ -75,7 +75,8 @@ end
 mutable struct Rooster <: AbstractChessPiece
     location::Union{Missing, Location}
     colour::Player_colour
+    move_number::Int64
     taken::Bool
-    Rooster(row::Int64, column::Char, colour::Player_colour, taken::Bool = false) = new(Location(row, column), colour, taken)
+    Rooster(row::Int64, column::Char, colour::Player_colour, move_number::Int64 = 0, taken::Bool = false) = new(Location(row, column), colour, move_number, taken)
 end
 

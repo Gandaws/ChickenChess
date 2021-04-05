@@ -6,8 +6,6 @@ mutable struct Game
     Game(player1::Player, player2::Player, turn::Player_colour = White::Player_colour, finished::Bool = false) = new(player1, player2, turn, finished)
 end
 
-
-
 function print_rgb(r, g, b, t)
     print("\e[1m\e[38;2;$r;$g;$b;249m", t)
 end
@@ -41,7 +39,7 @@ function display_game(game::Game)
 end
 
 function find_piece(game::Game, location::Location)
-    for piece in vcat(game.player1.chess_pieces, game.player2.chess_pieces)
+    for piece ∈ vcat(game.player1.chess_pieces, game.player2.chess_pieces)
         if piece.taken == false
             if piece.location == location
                 return piece
@@ -53,7 +51,7 @@ function find_piece(game::Game, location::Location)
 end
 
 function find_piece(player::Player, location::Location)
-    for piece in player.chess_pieces
+    for piece ∈ player.chess_pieces
         if piece.taken == false
             if piece.location == location
                 return piece

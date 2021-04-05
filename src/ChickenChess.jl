@@ -90,7 +90,6 @@ function get_move(current_player::Player, other_player::Player)
     end
 
     new_location = missing
-    # Check valid move!
     valid_move = false
     while !valid_move
         while ismissing(new_location)
